@@ -1,4 +1,5 @@
 # Go 语言实现敏感词检测（前缀树）
+
 ## 一、前言
 
 > 大家都知道游戏文字、文章等一些风控场景都实现了敏感词检测，一些敏感词会被屏蔽掉或者文章无法发布。今天我就分享用Go实现敏感词前缀树来达到文本的敏感词检测，让我们一探究竟！
@@ -12,13 +13,14 @@
 
 ```go
 sensitiveWords := []string{
-   "傻逼",
-   "傻叉",
-   "垃圾",
-   "妈的",
-   "sb",
+   "傻 & 逼",
+   "傻 & 叉",
+   "垃 & 圾",
+   "妈 & 的",
+   "s b",
 }
 ```
+由于文章审核原因敏感词就换成别的了，大家能理解意思就行。
 
 当在游戏中输入 **什么垃圾打野，傻逼一样，叫你来开龙不来，sb，** 该如何检测其中的敏感词并和谐掉
 
@@ -26,13 +28,13 @@ sensitiveWords := []string{
 
 ```go
 sensitiveWords := []string{
-   "傻逼",
-   "傻叉",
-   "垃圾",
-   "妈的",
-   "sb",
+   "傻 & 逼",
+   "傻 & 叉",
+   "垃 & 圾",
+   "妈 & 的",
+   "s b",
 }
-text := "什么垃圾打野，傻逼一样，叫你来开龙不来，sb"
+text := "什么垃&圾打野，傻&逼一样，叫你来开龙不来，s&b"
 
 for _, word := range sensitiveWords {
    text = strings.Replace(text, word, "*", -1)
@@ -51,13 +53,13 @@ text ->  什么*打野，*一样，叫你来开龙不来，*
 
 ```go
 sensitiveWords := []string{
-   "傻逼",
-   "傻叉",
-   "垃圾",
-   "妈的",
-   "sb",
+   "傻 & 逼",
+   "傻 & 叉",
+   "垃 & 圾",
+   "妈 & 的",
+   "s b",
 }
-text := "什么垃圾打野，傻逼一样，叫你来开龙不来，sb"
+text := "什么垃&圾打野，傻&逼一样，叫你来开龙不来，s&b"
 
 for _, word := range sensitiveWords {
    replaceChar := ""
@@ -112,13 +114,13 @@ A ->  65
 
 ```go
 sensitiveWords := []string{
-   "傻逼",
-   "傻叉",
-   "垃圾",
-   "妈的",
-   "sb",
+   "傻 & 逼",
+   "傻 & 叉",
+   "垃 & 圾",
+   "妈 & 的",
+   "s b",
 }
-text := "什么垃圾打野，傻逼一样，叫你来开龙不来，sb"
+text := "什么垃&圾打野，傻&逼一样，叫你来开龙不来，s&b"
 
 for _, word := range sensitiveWords {
    replaceChar := ""
@@ -145,13 +147,13 @@ text ->  什么**打野，**一样，叫你来开龙不来，**
 // 正则匹配
 func regDemo() {
    sensitiveWords := []string{
-      "傻逼",
-      "傻叉",
-      "垃圾",
-      "妈的",
-      "sb",
+      "傻&逼",
+      "傻&叉",
+      "垃&圾",
+      "妈&的",
+      "s&b",
    }
-   text := "什么垃圾打野，傻逼一样，叫你来开龙不来，sb"
+   text := "什么垃&圾打野，傻&逼一样，叫你来开龙不来，s&b"
 
    // 构造正则匹配字符
    regStr := strings.Join(sensitiveWords, "|")
@@ -199,11 +201,11 @@ func regDemo(sensitiveWords []string, matchContents []string) {
 
 func main() {
    sensitiveWords := []string{
-      "傻逼",
-      "傻叉",
-      "垃圾",
-      "妈的",
-      "sb",
+      "傻&逼",
+      "傻&叉",
+      "垃&圾",
+      "妈&的",
+      "s&b",
    }
    matchContents := []string{
       "什么垃圾打野，傻逼一样，叫你来开龙不来，sb",
@@ -525,7 +527,7 @@ func trieDemo(sensitiveWords []string, matchContents []string) {
 
    // 动态添加
    trie.AddWord("牛大大")
-   content := "今天，牛大大签发军令"
+   content := "今天，牛大大去挑战灰大大了"
    matchSensitiveWords, replaceText := trie.Match(content)
    fmt.Println("srcText        -> ", content)
    fmt.Println("replaceText    -> ", replaceText)
@@ -535,11 +537,11 @@ func trieDemo(sensitiveWords []string, matchContents []string) {
 
 func main() {
    sensitiveWords := []string{
-      "傻逼",
-      "傻叉",
-      "垃圾",
-      "妈的",
-      "sb",
+      "傻&逼",
+      "傻&叉",
+      "垃&圾",
+      "妈&的",
+      "s b",
    }
    matchContents := []string{
       "你是一个大傻&逼，大傻 叉",
@@ -734,8 +736,8 @@ func trieDemo(sensitiveWords []string, matchContents []string) {
    }
 
    // 动态添加
-   trie.AddWord("习大大")
-   content := "今天，习大大签发主席令"
+   trie.AddWord("牛大大")
+   content := "今天，牛大大去挑战灰大大了"
    matchSensitiveWords, replaceText := trie.Match(content)
    fmt.Println("srcText        -> ", content)
    fmt.Println("replaceText    -> ", replaceText)
@@ -794,9 +796,9 @@ srcText        ->  正常的内容☺
 replaceText    ->  正常的内容☺                               
 sensitiveWords ->  []                                        
 
-srcText        ->  今天，习大大签发主席令
-replaceText    ->  今天***签发主席令
-sensitiveWords ->  [习大大]
+srcText        ->  今天，牛大大挑战灰大大
+replaceText    ->  今天***挑战灰大大
+sensitiveWords ->  [牛大大]
 ```
 
 整体效果还是挺不错的，但是一些谐音等还是不能检测出，要想充分的进行敏感词检测，首先要有完善的敏感词库，其次就是先进行敏感词匹配然后再进行自然语言处理NLP完善，训练风控模型等检测率才能提升。
@@ -806,3 +808,4 @@ sensitiveWords ->  [习大大]
 敏感词前缀树匹配：https://gitee.com/huiDBK/sensitive-words-match
 
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/af8be1586206440e94b788f7418df684~tplv-k3u1fbpfcp-zoom-1.image)
+````
