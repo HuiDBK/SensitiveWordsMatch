@@ -13,11 +13,11 @@
 
 ```go
 sensitiveWords := []string{
-   "傻 & 逼",
-   "傻 & 叉",
-   "垃 & 圾",
-   "妈 & 的",
-   "s b",
+   "傻逼",
+   "傻叉",
+   "垃圾",
+   "妈的",
+   "sb",
 }
 ```
 由于文章审核原因敏感词就换成别的了，大家能理解意思就行。
@@ -28,13 +28,13 @@ sensitiveWords := []string{
 
 ```go
 sensitiveWords := []string{
-   "傻 & 逼",
-   "傻 & 叉",
-   "垃 & 圾",
-   "妈 & 的",
-   "s b",
+   "傻逼",
+   "傻叉",
+   "垃圾",
+   "妈的",
+   "sb",
 }
-text := "什么垃&圾打野，傻&逼一样，叫你来开龙不来，s&b"
+text := "什么垃圾打野，傻逼一样，叫你来开龙不来，sb"
 
 for _, word := range sensitiveWords {
    text = strings.Replace(text, word, "*", -1)
@@ -53,11 +53,11 @@ text ->  什么*打野，*一样，叫你来开龙不来，*
 
 ```go
 sensitiveWords := []string{
-   "傻 & 逼",
-   "傻 & 叉",
-   "垃 & 圾",
-   "妈 & 的",
-   "s b",
+   "傻逼",
+   "傻叉",
+   "垃圾",
+   "妈的",
+   "sb",
 }
 text := "什么垃&圾打野，傻&逼一样，叫你来开龙不来，s&b"
 
@@ -79,7 +79,7 @@ text ->  什么******打野，******一样，叫你来开龙不来，**
 
 **为什么中文的和谐字符多了这么*？**
 
-因为Go中采用utf-8来进行中文字符编码，因此一个中文字符要占3个字节
+因为Go中默认采用utf-8来进行中文字符编码，因此一个中文字符要占3个字节
 
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a0863b6f551a46c4afce70f51379e7d1~tplv-k3u1fbpfcp-zoom-1.image)
 
@@ -89,7 +89,10 @@ text ->  什么******打野，******一样，叫你来开龙不来，**
 
 > 源码解释如下
 >
-> // rune is an alias for int32 and is equivalent to int32 in all ways. It is // used, by convention, to distinguish character values from integer values. type rune = int32
+> // rune is an alias for int32 and is equivalent to int32 in all ways. It is
+> used, by convention, to distinguish character values from integer values.
+>
+> type rune = int32
 
 
 
@@ -114,13 +117,13 @@ A ->  65
 
 ```go
 sensitiveWords := []string{
-   "傻 & 逼",
-   "傻 & 叉",
-   "垃 & 圾",
-   "妈 & 的",
-   "s b",
+   "傻逼",
+   "傻叉",
+   "垃圾",
+   "妈的",
+   "sb",
 }
-text := "什么垃&圾打野，傻&逼一样，叫你来开龙不来，s&b"
+text := "什么垃圾打野，傻逼一样，叫你来开龙不来，sb"
 
 for _, word := range sensitiveWords {
    replaceChar := ""
@@ -147,13 +150,13 @@ text ->  什么**打野，**一样，叫你来开龙不来，**
 // 正则匹配
 func regDemo() {
    sensitiveWords := []string{
-      "傻&逼",
-      "傻&叉",
-      "垃&圾",
-      "妈&的",
-      "s&b",
+      "傻逼",
+      "傻叉",
+      "垃圾",
+      "妈的",
+      "sb",
    }
-   text := "什么垃&圾打野，傻&逼一样，叫你来开龙不来，s&b"
+   text := "什么垃圾打野，傻逼一样，叫你来开龙不来，sb"
 
    // 构造正则匹配字符
    regStr := strings.Join(sensitiveWords, "|")
@@ -201,11 +204,11 @@ func regDemo(sensitiveWords []string, matchContents []string) {
 
 func main() {
    sensitiveWords := []string{
-      "傻&逼",
-      "傻&叉",
-      "垃&圾",
-      "妈&的",
-      "s&b",
+      "傻逼",
+      "傻叉",
+      "垃圾",
+      "妈的",
+      "sb",
    }
    matchContents := []string{
       "什么垃圾打野，傻逼一样，叫你来开龙不来，sb",
@@ -394,13 +397,13 @@ func main() {
 垃圾 [22403 22334]
 ```
 
-添加前两个敏感词傻逼、傻叉，有一个共同的前缀**傻、rune-> 200667**
+添加前两个敏感词傻逼、傻叉，有一个共同的前缀 **傻、rune-> 200667**
 
 1.  前缀的root是没有孩子节点，添加第一个敏感词时先转换成 **[]rune（可以想象成字符数组）**
 
 <!---->
 
-2.  遍历rune字符数组，先判断有没有孩子节点（一开始root是没有的），没有就先构造，然后把傻（200667）存到 childMap中 key 为 傻(200667)，value 为 TrieNode 但没有任何数据然后返回当前新增的节点
+2.  遍历rune字符数组，先判断有没有孩子节点（一开始root是没有的），没有就先构造，然后把 **傻（200667）** 存到 childMap中 key 为 傻(200667)，value 为 TrieNode 但没有任何数据然后返回当前新增的节点
 
 ```go
 TrieNode{
@@ -409,7 +412,7 @@ TrieNode{
 }
 ```
 
-3.  此时添加**逼（36924）** ，同样做2的步骤，傻逼这个敏感词添加完成走出for循环，然后将**End=true、Data=傻逼**。
+3.  此时添加 **逼（36924）** ，同样做2的步骤，傻逼这个敏感词添加完成走出for循环，然后将**End=true、Data=傻逼**。
 
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/fb194f63085b42c296b69efbb0bad3e7~tplv-k3u1fbpfcp-zoom-1.image)
 
@@ -417,7 +420,7 @@ TrieNode{
 
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e76257b0462d437997ae27e271936e8a~tplv-k3u1fbpfcp-zoom-1.image)
 
-5.  添加第三个敏感词**垃圾**，又从根节点开始，**垃（22403）** ，根节点不存在该子节点，故添加到根节点的childMap中，然后返回新增的 垃（22403）节点
+5.  添加第三个敏感词**垃 圾**，又从根节点开始，**垃（22403）** ，根节点不存在该子节点，故添加到根节点的childMap中，然后返回新增的 垃（22403）节点
 
 <!---->
 
@@ -537,14 +540,14 @@ func trieDemo(sensitiveWords []string, matchContents []string) {
 
 func main() {
    sensitiveWords := []string{
-      "傻&逼",
-      "傻&叉",
-      "垃&圾",
-      "妈&的",
-      "s b",
+      "傻逼",
+      "傻叉",
+      "垃圾",
+      "妈的",
+      "sb",
    }
    matchContents := []string{
-      "你是一个大傻&逼，大傻 叉",
+      "你是一个大傻逼，大傻叉",
       "你是傻☺叉",
       "shabi东西",
       "他made东西",
@@ -586,7 +589,7 @@ srcText        ->  他made东西
 replaceText    ->  他made东西
 sensitiveWords ->  []
 
-srcText        ->  什么垃圾打野，傻逼一样，叫你来开龙不来，傻逼东西，SB
+srcText        ->  什么垃 圾打野，傻 逼一样，叫你来开龙不来，傻 逼东西，S B
 replaceText    ->  什么**打野，**一样，叫你来开龙不来，**
 sensitiveWords ->  [垃圾 傻逼]
 
@@ -754,11 +757,11 @@ func main() {
    }
 
    matchContents := []string{
-      "你是一个大傻&逼，大傻 叉",
+      "你是一个大傻逼，大傻叉",
       "你是傻☺叉",
       "shabi东西",
       "他made东西",
-      "什么垃圾打野，傻逼一样，叫你来开龙不来，SB",
+      "什么垃 圾打野，傻逼一样，叫你来开龙不来，SB",
       "正常的内容☺",
    }
 
@@ -772,7 +775,7 @@ func main() {
 
 ```go
 --------- 前缀树匹配敏感词 ---------
-srcText        ->  你是一个大傻&逼，大傻 叉                  
+srcText        ->  你是一个大傻逼，大傻叉                  
 replaceText    ->  你是一个大**大**                          
 sensitiveWords ->  [傻逼 傻叉]                               
                                                              
@@ -801,11 +804,12 @@ replaceText    ->  今天***挑战灰大大
 sensitiveWords ->  [牛大大]
 ```
 
-整体效果还是挺不错的，但是一些谐音等还是不能检测出，要想充分的进行敏感词检测，首先要有完善的敏感词库，其次就是先进行敏感词匹配然后再进行自然语言处理NLP完善，训练风控模型等检测率才能提升。
+整体效果还是挺不错的，但是一些谐音或者全部英文句子时有空格还是不能去除空格不然可能会存在误判还是不能检测出，要想充分的进行敏感词检测，首先要有完善的敏感词库，其次就是特殊情况特殊处理，最后就是先进行敏感词匹配然后再进行自然语言处理NLP完善，训练风控模型等检测效果才更只能。
 
 ## 四、源代码
 
 敏感词前缀树匹配：https://gitee.com/huiDBK/sensitive-words-match
 
 ![](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/af8be1586206440e94b788f7418df684~tplv-k3u1fbpfcp-zoom-1.image)
-````
+
+

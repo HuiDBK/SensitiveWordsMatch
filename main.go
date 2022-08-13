@@ -108,7 +108,7 @@ func trieDemo(sensitiveWords []string, matchContents []string) {
 
 	// 动态添加
 	trie.AddWord("牛大大")
-	content := "今天，牛大大签发军令"
+	content := "今天，牛大大挑战灰大大"
 	matchSensitiveWords, replaceText := trie.Match(content)
 	fmt.Println("srcText        -> ", content)
 	fmt.Println("replaceText    -> ", replaceText)
